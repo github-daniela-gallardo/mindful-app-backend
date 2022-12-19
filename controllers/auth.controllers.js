@@ -19,6 +19,7 @@ const signUpControllers = (req, res, next) => {
         userName: req.body.userName
     })
         .then(createdUser => {
+            res.send(createdUser)
             console.log('this is the new user', createdUser)
         })
         .catch(err => console.log(err))

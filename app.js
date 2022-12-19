@@ -33,10 +33,12 @@ app.use(cors({
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const authRouter = require('./routes/auth.route');
+const addNotesRouter = require ('./routes/addNote.route');
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/auth', authRouter);
+app.use('/addnote', addNotesRouter)
 
 
 
