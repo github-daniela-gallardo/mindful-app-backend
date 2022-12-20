@@ -3,6 +3,7 @@ const router = express.Router();
 const Question = require('../models/Question.model')
 const Answer =require('../models/Answer.model')
 const Notes = require('../models/Notes.model')
+const User = require('../models/User.model')
 
 
 
@@ -58,13 +59,33 @@ router.post('/answer', (req,res,next) =>{
 })
 
 
-
+// this route should show all the notes associated with the user that is logged in 
 router.get('/notes', (req, res, next) =>{
-    Notes.find()
+   
+    Notes.find({user: req.payload._id})
     .then(foundNote => {
         res.send(foundNote)
     })
     .catch(err => console.log(err))
 })
+
+
+// create a route here that will let me update the note selected - update answers
+
+
+
+
+
+// create a route that will let me delete the note 
+
+// router.delete('/notes/:noteId', (req, res, next) =>{
+
+//     Notes.findByIdAndRemove(req.params.noteId)
+//     .then(deletedNote => {
+//         res.send(deletedNote)
+//     })
+//     .catch(err => console.log(err))
+// })
+
 
 module.exports = router;
