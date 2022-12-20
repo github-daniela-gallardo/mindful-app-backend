@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 
 //middleware here
+const { isAuthenticated } = require('./middleware/jwt.middleware')
 
 
 const PORT = process.env.PORT;
@@ -38,7 +39,7 @@ const addNotesRouter = require ('./routes/addNote.route');
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/auth', authRouter);
-app.use('/addnote', addNotesRouter)
+app.use('/addnote', isAuthenticated, addNotesRouter)
 
 
 
