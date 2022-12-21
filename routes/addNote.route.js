@@ -93,9 +93,17 @@ router.get('/notes/:noteId', (req, res, next) =>{
 
 // create a route here that will let me update the note selected -> update answers
 
-router.put('/update', (req, res, next) =>{
+router.put('/update/:noteId', (req, res, next) =>{
+    
+    console.log(req.body)
 
-    Notes.findByIdAndUpdate({user: req.payload._id})
+    const myNewAnswers = req.body.answers.map(a => Answer.findByIdAndUpdate(a._id, { answer: a.answer }, {new: true}));
+    Promise.all(myNewAnswers)
+        .then(x => {
+            console.log(x)
+            res.send('it worked')
+        })
+        .catch(e => res.send(e))
 
 })  
 
@@ -104,14 +112,14 @@ router.put('/update', (req, res, next) =>{
 
 // create a route that will let me delete the note 
 
-// router.delete('/notes/:noteId', (req, res, next) =>{
+ router.delete('/notes/:noteId', (req, res, next) =>{
 
-//     Notes.findByIdAndRemove(req.body.noteId)
-//     .then(deletedNote => {
-//         res.send(deletedNote)
-//     })
-//     .catch(err => console.log(err))
-// })
+    Notes.findByIdAndRemove(req.params.noteId)
+    .then(deletedNote => {
+        res.send(deletedNote)
+    })
+    .catch(err => console.log(err))
+})
 
 
 module.exports = router;
