@@ -2,6 +2,9 @@ const bcryptjs = require('bcryptjs');
 const User = require('../models/User.model');
 const jwt = require('jsonwebtoken');
 
+
+
+
 const salt = 10;
 
 const signUpControllers = (req, res, next) => {
@@ -69,5 +72,69 @@ const loginController = (req, res, next) => {
 }
 
 
+const updateUser = (req, res, next) => {
 
-module.exports = { signUpControllers, loginController }
+    if(req.body.password){
+        User.findByIdAndUpdate(
+                req.payload._id 
+                , {
+                userName: req.body.userName,
+                email: req.body.email,
+                password:  bcryptjs.hashSync(req.body.password)
+            }, { new: true })
+            
+            .then(updatedUser => {
+                const payload = {
+                    _id: updatedUser._id,
+                    email: updatedUser.email,
+                    userName: updatedUser.userName
+                }
+                const authToken = jwt.sign(
+                    payload,
+                    process.env.TOKEN_SECRET,
+                    { algorithm: 'HS256', expiresIn: "12h" }
+                );
+                res.json({
+                    authToken: authToken
+                })
+            })
+            .catch(err => console.log(err))
+    } else {
+        User.findByIdAndUpdate(
+            req.payload._id 
+            , {
+            userName: req.body.userName,
+            email: req.body.email,
+        }, { new: true })
+        
+        .then(updatedUser => {
+            const payload = {
+                _id: updatedUser._id,
+                email: updatedUser.email,
+                userName: updatedUser.userName
+            }
+            const authToken = jwt.sign(
+                payload,
+                process.env.TOKEN_SECRET,
+                { algorithm: 'HS256', expiresIn: "12h" }
+            );
+            res.json({
+                authToken: authToken
+            })
+        })
+        .catch(err => console.log(err))
+    }
+    
+}
+
+const deleteUser =(req, res, next) =>{
+    User.findByIdAndRemove(req.payload._id)
+    .then(deletedUser =>{
+        res.json(deletedUser)
+    })
+    .catch(err =>console.log(err))
+}
+
+
+
+module.exports = { signUpControllers, loginController , updateUser, deleteUser}

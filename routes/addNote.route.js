@@ -59,7 +59,7 @@ router.post('/answer', (req,res,next) =>{
 })
 
 
-// this route should show all the notes associated with the user that is logged in 
+// this route show all the notes associated with the user that is logged in 
 router.get('/notes', (req, res, next) =>{
    
     Notes.find({user: req.payload._id})
@@ -70,8 +70,34 @@ router.get('/notes', (req, res, next) =>{
 })
 
 
-// create a route here that will let me update the note selected - update answers
 
+
+
+
+// this route show one note when you click on it 
+router.get('/notes/:noteId', (req, res, next) =>{
+   
+    Notes.findById(req.params.noteId)
+    .populate(
+        {path: 'answers',
+        populate: {path: 'question'}
+            }
+        )
+    .then(foundNote => {
+        res.send(foundNote)
+    })
+    .catch(err => console.log(err))
+})
+
+
+
+// create a route here that will let me update the note selected -> update answers
+
+router.put('/update', (req, res, next) =>{
+
+    Notes.findByIdAndUpdate({user: req.payload._id})
+
+})  
 
 
 
@@ -80,7 +106,7 @@ router.get('/notes', (req, res, next) =>{
 
 // router.delete('/notes/:noteId', (req, res, next) =>{
 
-//     Notes.findByIdAndRemove(req.params.noteId)
+//     Notes.findByIdAndRemove(req.body.noteId)
 //     .then(deletedNote => {
 //         res.send(deletedNote)
 //     })
