@@ -25,6 +25,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+
 app.use(cors({
   origin: '*'
 }));
@@ -50,9 +52,7 @@ mongoose.connect(process.env.MONGODB_URI)
 .then(x => {
   console.log('connected to db', x.connections[0].name)
 
-  app.listen(PORT, () =>{
-    console.log('sever running on port' + PORT)
-  })
+
 })
 .catch(err => console.log (err))
 
