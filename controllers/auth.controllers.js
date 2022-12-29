@@ -9,7 +9,7 @@ const salt = 10;
 
 const signUpControllers = (req, res, next) => {
     if (!req.body.email || !req.body.password || !req.body.userName) {
-        return res.status(400).json({
+        return res.json({
             error: {
                 message: 'All fields are require'
             }
@@ -25,7 +25,7 @@ const signUpControllers = (req, res, next) => {
             res.send(createdUser)
             console.log('this is the new user', createdUser)
         })
-        .catch(err => console.log(err))
+        .catch(err => res.send(err))
 
 }
 
@@ -35,7 +35,7 @@ const loginController = (req, res, next) => {
     if (!email || !password) {
         return res.json({
             error: {
-                massage: 'Missing email or password'
+                message: 'Missing email or password'
             }
         })
     }
